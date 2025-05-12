@@ -8,11 +8,23 @@ import java.util.*
 @Repository
 interface BookRepository : JpaRepository<Book, UUID> {
 
-    // Custom search method to find books by title, author, and availability
-    fun findByTitleContainingAndAuthorContainingAndAvailable(
+    fun findByTitleContainingIgnoreCase(title: String): List<Book>
+
+    fun findByAuthorContainingIgnoreCase(author: String): List<Book>
+
+    fun findByAvailable(available: Boolean): List<Book>
+
+    // For combined search, matching the test's expectation of IgnoreCase
+    fun findByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCaseAndAvailable(
         title: String?,
         author: String?,
         available: Boolean?
     ): List<Book>
 
+    // Keep the original if it's used elsewhere or if tests are mixed
+    fun findByTitleContainingAndAuthorContainingAndAvailable(
+        title: String?,
+        author: String?,
+        available: Boolean?
+    ): List<Book>
 }

@@ -1,15 +1,19 @@
 package com.library.system.repository
 
 import com.library.system.model.BorrowingRecord
-import com.library.system.model.User
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 import java.util.*
 
+@Repository
 interface BorrowingRecordRepository : JpaRepository<BorrowingRecord, UUID> {
 
-    // 1. Find borrowing records by bookId and returned status
-    fun findByBookIdAndReturned(bookId: UUID, returned: Boolean): List<BorrowingRecord>
+    // To match BookServiceTest expectations
+    fun findByBookIdAndReturnDateIsNull(bookId: UUID): Optional<BorrowingRecord>
 
-    // 2. Find borrowing records by user
-    fun findByUser(user: User): List<BorrowingRecord>
+    fun countByUserIdAndReturnDateIsNull(userId: UUID): Long
+
+    // Original methods from your provided code (can be kept if used elsewhere or removed if redundant)
+    // fun findByBookIdAndReturned(bookId: UUID, returned: Boolean): List<BorrowingRecord>
+    // fun findByUser(user: User): List<BorrowingRecord>
 }
