@@ -45,27 +45,77 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, status)
     }
 
-    @ExceptionHandler(NoSuchElementException::class)
-    fun handleNotFound(ex: NoSuchElementException, request: WebRequest): ResponseEntity<ApiError> {
+    // Updated to handle ResourceNotFoundException globally
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun handleResourceNotFound(ex: ResourceNotFoundException, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
         val errorResponse = ApiError(
             status = HttpStatus.NOT_FOUND.value(),
             error = "Not Found",
             message = ex.message,
-            path = request.getDescription(false).removePrefix("uri=")
+            path = path
         )
-
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNotFound(ex: NoSuchElementException, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
+        val errorResponse = ApiError(
+            status = HttpStatus.NOT_FOUND.value(),
+            error = "Not Found",
+            message = ex.message,
+            path = path
+        )
+        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(BookNotAvailableException::class)
+    fun handleBookNotAvailable(ex: BookNotAvailableException, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
+        val errorResponse = ApiError(
+            status = HttpStatus.CONFLICT.value(),
+            error = "Conflict",
+            message = ex.message,
+            path = path
+        )
+        return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
+    }
+
+    @ExceptionHandler(BookAlreadyReturnedException::class)
+    fun handleBookAlreadyReturned(ex: BookAlreadyReturnedException, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
+        val errorResponse = ApiError(
+            status = HttpStatus.CONFLICT.value(),
+            error = "Conflict",
+            message = ex.message,
+            path = path
+        )
+        return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
+    }
+
+    @ExceptionHandler(BorrowingLimitExceededException::class)
+    fun handleBorrowingLimitExceeded(ex: BorrowingLimitExceededException, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
+        val errorResponse = ApiError(
+            status = HttpStatus.CONFLICT.value(), // Or 422 Unprocessable Entity
+            error = "Conflict",
+            message = ex.message,
+            path = path
+        )
+        return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGeneric(ex: Exception, request: WebRequest): ResponseEntity<ApiError> {
+        val path = request.getDescription(false).removePrefix("uri=")
         val errorResponse = ApiError(
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
             error = "Internal Server Error",
             message = ex.message,
-            path = request.getDescription(false).removePrefix("uri=")
+            path = path
         )
-
+        ex.printStackTrace() // Helpful for debugging, consider removing in production
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
