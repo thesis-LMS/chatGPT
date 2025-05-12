@@ -11,8 +11,8 @@
 	<groupId>com.lms</groupId>
 	<artifactId>service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>service</name>
-	<description>library management system</description>
+	<name>chatgpt</name>
+	<description>library management system implementation using chatgpt</description>
 	<url/>
 	<licenses>
 		<license/>
