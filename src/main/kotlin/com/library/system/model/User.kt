@@ -10,15 +10,12 @@ data class User(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-
     @field:NotBlank(message = "Name is mandatory")
     val name: String,
-
     @field:NotBlank(message = "Email is mandatory")
     @field:Email(message = "Email should be valid")
     @Column(unique = true)
     val email: String,
-
     @Enumerated(EnumType.STRING)
-    val role: UserRole = UserRole.MEMBER
+    val role: UserRole = UserRole.MEMBER,
 )

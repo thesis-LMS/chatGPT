@@ -7,7 +7,6 @@ import java.util.*
 
 @Repository
 interface BorrowingRecordRepository : JpaRepository<BorrowingRecord, UUID> {
-
     // To match BookServiceTest expectations
     fun findByBookIdAndReturnDateIsNull(bookId: UUID): Optional<BorrowingRecord>
 

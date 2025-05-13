@@ -10,10 +10,13 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(private val userService: UserService) {
-
+class UserController(
+    private val userService: UserService,
+) {
     @PostMapping
-    fun registerUser(@Valid @RequestBody user: User): ResponseEntity<User> {
+    fun registerUser(
+        @Valid @RequestBody user: User,
+    ): ResponseEntity<User> {
         val created = userService.registerUser(user)
         return ResponseEntity
             .created(URI.create("/api/users/${created.id}"))
@@ -21,15 +24,13 @@ class UserController(private val userService: UserService) {
     }
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: UUID): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.getUserById(id))
-    }
+    fun getUserById(
+        @PathVariable id: UUID,
+    ): ResponseEntity<User> = ResponseEntity.ok(userService.getUserById(id))
 
     @PutMapping("/{id}")
     fun updateUser(
         @PathVariable id: UUID,
-        @Valid @RequestBody user: User
-    ): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.updateUser(id, user))
-    }
+        @Valid @RequestBody user: User,
+    ): ResponseEntity<User> = ResponseEntity.ok(userService.updateUser(id, user))
 }
